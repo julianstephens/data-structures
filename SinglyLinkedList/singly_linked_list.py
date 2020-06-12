@@ -3,7 +3,13 @@ class SinglyLinkedList:
         def __init__(self, data, next=None): 
             self.data = data
             self.next = next
-         
+        
+        def __eq__(self, other): 
+            if self.data == other.data and self.next == other.next: 
+                return true
+            
+            return false
+
         def getData(self): 
             return self.data
 
@@ -40,7 +46,7 @@ class SinglyLinkedList:
         else: 
             curr = self.head
 
-            for i in range(0, index-1): 
+            for i in range(index-1): 
                 curr = curr.getNext()
 
             return curr.getNext().getData();
@@ -54,7 +60,7 @@ class SinglyLinkedList:
         else: 
             curr = self.head
 
-            for i in range(0, index-1): 
+            for i in range(index-1): 
                 curr = curr.getNext()
 
             curr.getNext().setData(data);
@@ -101,10 +107,78 @@ class SinglyLinkedList:
             curr = self.head
             newNode = SinglyLinkedList.__Node(data)
 
-            for i in range(0, index-1): 
+            for i in range(index-1): 
                 curr = curr.getNext()
 
             newNode.setNext(curr.getNext())
             curr.setNext(newNode) 
-            self.length += 1 
+            self.length += 1
 
+    def append(self, data): 
+        checkData(data)
+
+        self.__addToBack__(data)
+
+    def delete(self, index): 
+        checkIndex(index)
+
+        if self.length == 1: 
+            self.head = None
+        else:
+
+            curr = self.head
+
+            for node in range(index): 
+                curr = curr.getNext()
+        
+            curr.setNext(curr.getNext.getNext())
+
+        self.length -= 1
+
+    def contains(self, data): 
+        checkData(data)
+
+        curr = self.head
+        index = 0
+
+        while curr.getNext() is not None: 
+            if curr.getData() == data: 
+                return index
+    
+            curr = curr.getNext()
+            index += 1
+
+        return -1
+
+    def get(self, index): 
+        checkIndex(index)
+
+        if index == 0: 
+            return self.head.getData()
+        else: 
+            curr = self.head
+
+            for node in range(index): 
+                curr = curr.getNext()
+
+            return curr.getNext().getData()
+
+    def toArray(self): 
+        sllArray = [None] * self.length
+        curr = self.head
+
+        for i in range(self.length): 
+            sllArray[i] = curr.getData()
+            curr = curr.getNext()
+
+        return sllArray
+    
+    def isEmpty(self):
+        return self.head is None
+
+    def clear(self): 
+        self.head = None
+        self.length = 0
+
+    def length(self): 
+        return self.length
