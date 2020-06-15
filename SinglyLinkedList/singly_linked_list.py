@@ -61,8 +61,9 @@ class SinglyLinkedList:
 
         for item in contents: 
             self.append(item)
+            self.length += 1
 
-    def __checkIndex____(index): 
+    def checkIndex(self, index): 
         """Checks that the index is in bounds
 
         Args:
@@ -71,11 +72,11 @@ class SinglyLinkedList:
         Raises: 
             IndexError: If the index is out of bounds
         """
-        if index < 0 or index >= self.length: 
-            raise IndexError('Please specify an index that is not negative' 
+        if index < 0 or index > self.length: 
+            raise IndexError('Please specify an index that is not negative ' 
                              + 'and/or greater than the size of the data structure.')
     
-    def __checkData__(data): 
+    def checkData(self, data): 
         """Checks that the data is not null
 
         Args:
@@ -87,7 +88,7 @@ class SinglyLinkedList:
         if data is None: 
             raise ValueError('Cannot add null data to the data structure.')
 
-    def __addToFront__(self, data): 
+    def addToFront(self, data): 
         """Adds a node to the front of the SinglyLinkedList
 
         Runs O(1) for alll cases
@@ -95,7 +96,7 @@ class SinglyLinkedList:
         Args:
             data (int): The data for the new node
         """
-        self.__checkData__(data)
+        self.checkData(data)
 
         if self.head is None: 
             newNode = SinglyLinkedList.__Node(data)
@@ -109,7 +110,7 @@ class SinglyLinkedList:
 
         self.length += 1
 
-    def __addToBack__(self, data): 
+    def addToBack(self, data): 
         """Add a node to the back of the SinglyLinkedList
 
         O(1) for all cases
@@ -117,16 +118,21 @@ class SinglyLinkedList:
         Args:
             data (int): The data to be added
         """
-        self.__checkData__(data)
+        self.checkData(data)
 
-        curr = self.head
-        while curr.getNext() is not None: 
-            curr = curr.getNext()
+        if self.head is None: 
+            newNode = SinglyLinkedList.__Node(data)
+            self.head = newNode
+            self.length += 1 
+        else:
+            curr = self.head
+            for node in range(self.length - 1): 
+                curr = curr.getNext()
 
-        newNode = SinglyLinkedList.__Node(data)
-        curr.setNext(newNode)
+            newNode = SinglyLinkedList.__Node(data)
+            curr.setNext(newNode)
 
-        self.length += 1
+            self.length += 1
 
 
     def insert(self, index, data): 
@@ -137,18 +143,18 @@ class SinglyLinkedList:
         Args:
             data (int): The data for the new node
         """
-        self.__checkIndex__(index)
-        self.__checkData__(data)
+        self.checkIndex(index)
+        self.checkData(data)
 
         if index == 0: 
-            self.__addToFront__(data)        
+            self.addToFront(data)        
         elif index == self.length:
-            self.__addToBack__(data)
+            self.addToBack(data)
         else: 
             curr = self.head
             newNode = SinglyLinkedList.__Node(data)
 
-            for i in range(index-1): 
+            for i in range(index - 1): 
                 curr = curr.getNext()
 
             newNode.setNext(curr.getNext())
@@ -163,9 +169,9 @@ class SinglyLinkedList:
         Args:
             data (int): The data for the new node
         """
-        self.__checkData__(data)
+        self.checkData(data)
 
-        self.__addToBack__(data)
+        self.addToBack(data)
 
     def delete(self, index): 
         """Removes node at specified index
@@ -175,7 +181,7 @@ class SinglyLinkedList:
         Args:
             index (int): The index of the node to be removed
         """
-        self.__checkIndex__(index)
+        self.checkIndex(index)
 
         if self.length == 1: 
             self.head = None
@@ -186,7 +192,7 @@ class SinglyLinkedList:
             for node in range(index): 
                 curr = curr.getNext()
         
-            curr.setNext(curr.getNext.getNext())
+            curr.setNext(curr.getNext().getNext())
 
         self.length -= 1
 
@@ -201,7 +207,7 @@ class SinglyLinkedList:
         Returns:
             Index of node if found or -1 if not found
         """
-        self.__checkData__(data)
+        self.checkData(data)
 
         curr = self.head
         index = 0
@@ -226,7 +232,7 @@ class SinglyLinkedList:
         Returns: 
             The data at the specified index
         """
-        self.__checkIndex__(index)
+        self.checkIndex(index)
 
         if index == 0: 
             return self.head.getData()
@@ -275,7 +281,7 @@ class SinglyLinkedList:
         self.head = None
         self.length = 0
 
-    def length(self): 
+    def size(self): 
         """Returns the size of the SinglyLinkedList
 
         O(1) for all cases
@@ -284,3 +290,13 @@ class SinglyLinkedList:
             Int {@code self.length}
         """
         return self.length
+
+    def getHead(self): 
+        """Returns the head of the SinglyLinkedList
+
+        O(1) for all cases
+
+        Returns: 
+            Node current head of SinglyLinkedList
+        """
+        return self.head
