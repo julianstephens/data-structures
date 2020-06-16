@@ -60,7 +60,7 @@ class SinglyLinkedList:
         self.length = 0
 
         for item in contents: 
-            self.append(item)
+            self.addToBack(item)
             self.length += 1
 
     def checkIndex(self, index): 
@@ -91,17 +91,16 @@ class SinglyLinkedList:
     def addToFront(self, data): 
         """Adds a node to the front of the SinglyLinkedList
 
-        Runs O(1) for alll cases
+        Runs O(1) for all cases
 
         Args:
             data (int): The data for the new node
         """
         self.checkData(data)
 
-        if self.head is None: 
+        if self.head is None or self.head.getData() is None: 
             newNode = SinglyLinkedList.__Node(data)
             self.head = newNode
-            newNode.setNext(newNode)
         else: 
             newNode = SinglyLinkedList.__Node(self.head.getData())
             newNode.setNext(self.head.getNext())
@@ -120,7 +119,7 @@ class SinglyLinkedList:
         """
         self.checkData(data)
 
-        if self.head is None: 
+        if self.head is None or self.head.getData() is None: 
             newNode = SinglyLinkedList.__Node(data)
             self.head = newNode
             self.length += 1 
@@ -135,7 +134,7 @@ class SinglyLinkedList:
             self.length += 1
 
 
-    def insert(self, index, data): 
+    def addAtIndex(self, index, data): 
         """Add a node at the specified index
 
         O(1) for add to indices 0 and {@code self.length}
@@ -161,65 +160,80 @@ class SinglyLinkedList:
             curr.setNext(newNode) 
             self.length += 1
 
-    def append(self, data): 
-        """Add a node to the back of the SinglyLinkedList
+    def removeFromFront(self): 
+        """Removes node at the front of the SinglyLinkedList
 
         O(1) for all cases
 
-        Args:
-            data (int): The data for the new node
+        Returns: 
+            data (int): The data that is removed
         """
-        self.checkData(data)
+        removed  = self.head.getData()
+         
+        if self.length == 1: 
+            self.head = None
+        else: 
+            self.head = self.head.getNext()
 
-        self.addToBack(data)
+        self.length -= 1
 
-    def delete(self, index): 
+        return removed
+
+    def removeFromBack(self): 
+        """Removes node from the back of the SinglyLinkedList
+
+        O(1) for size = 0, O(n) for all other cases
+
+        Returns: 
+            data (int): The data that is removed
+        """
+        removed = ""
+        
+        if self.length == 1: 
+            removed = self.head.getData()
+            self.head = None
+        else: 
+            curr = self.head
+
+            for i in range(self.length - 2): 
+                curr = curr.getNext()
+
+            removed = curr.getNext().getData()
+            curr.setNext(None)
+
+        self.length -= 1
+
+        return removed
+
+    def removeAtIndex(self, index): 
         """Removes node at specified index
 
         O(1) for index 0, O(n) for all other cases
 
         Args:
             index (int): The index of the node to be removed
+
+        Returns: 
+            data (int): The data that is removed
         """
         self.checkIndex(index)
+        removed = ""
 
         if self.length == 1: 
+            removed = self.head.getData()
             self.head = None
         else:
-
             curr = self.head
 
-            for node in range(index): 
+            for i in range(index - 1): 
                 curr = curr.getNext()
         
+            removed = curr.getNext().getData()
             curr.setNext(curr.getNext().getNext())
-
+            
         self.length -= 1
 
-    def contains(self, data): 
-        """Checks if node with specif
-
-        Worst case O(n)
-
-        Args:
-            data (int): Data to search for
-
-        Returns:
-            Index of node if found or -1 if not found
-        """
-        self.checkData(data)
-
-        curr = self.head
-        index = 0
-
-        while curr.getNext() is not None: 
-            if curr.getData() == data: 
-                return index
-    
-            curr = curr.getNext()
-            index += 1
-
-        return -1
+        return removed
 
     def get(self, index): 
         """Returns node at the specified index
@@ -239,7 +253,7 @@ class SinglyLinkedList:
         else: 
             curr = self.head
 
-            for node in range(index): 
+            for i in range(index - 1): 
                 curr = curr.getNext()
 
             return curr.getNext().getData()
@@ -271,7 +285,7 @@ class SinglyLinkedList:
         Returns:
             Bool True if empty; False otherwise
         """
-        return self.head is None
+        return self.head is None or self.head.getData() is None 
 
     def clear(self): 
         """Clears the SinglyLinkedList of all data
